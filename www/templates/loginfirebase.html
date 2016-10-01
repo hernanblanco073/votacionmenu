@@ -6,8 +6,8 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="Logear()">
-      <div class="list">
+    <form>
+      <div class="list" ng-if="logeado=='no'">
         <label class="item item-input">
           <span class="input-label">Username</span>
           <input type="text" ng-model="loginData.username">
@@ -17,7 +17,25 @@
           <input type="password" ng-model="loginData.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
+          <button class="button button-block button-positive" ng-click="Logear()">Log in</button>
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" ng-click="Reset()">Resetear Password</button>
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" ng-click="Registrar()">Registrarse</button>
+        </label>
+      </div>
+
+      <div class="list" ng-if="verificado==false">
+      	<label class="item">
+          <button class="button button-block button-positive" ng-click="Verificar()">Verificar mail</button>
+        </label>
+      </div>
+
+      <div class="list"  ng-if="logeado=='ok'">
+        <label class="item">
+          <button class="button button-block button-positive" ng-click="Deslogear()">Deslogear</button>
         </label>
       </div>
     </form>

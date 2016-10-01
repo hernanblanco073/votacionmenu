@@ -56,21 +56,97 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('LoginFirebaseCtrl', function($scope, $stateParams) {
+.controller('LoginFirebaseCtrl', function($scope, $stateParams, $timeout) {
 
   $scope.loginData = {};
 
-  $scope.loginData.username = "elejmplo@votacion.com";
-  $scope.loginData.password = "pass01";
+  $scope.loginData.username = "hernanblanco.073@gmail.com";
+  $scope.loginData.password = "passreset";
+  $scope.logeado = "no";
 
   $scope.Logear = function(){
-    firebase.auth().signInWithEmailAndPassword($scope.loginData.username, $scope.loginData.password)
+    $timeout(firebase.auth().signInWithEmailAndPassword($scope.loginData.username, $scope.loginData.password)
+        .catch(function(error){
+          if(error.code == "auth/user-not-found")
+          {
+            alert("No existe el usuario");
+          }
+          else
+            if(error.code == "auth/wrong-password")
+            {
+              alert("Contraseña incorrecta");
+            }
+            else
+              alert(error.message);
+        })
+        .then(function(respuesta){
+          console.info("respuesta",respuesta);
+          $scope.verificado = respuesta.emailVerified;
+          $scope.logeado = "ok";
+      })
+    )
+  }
+
+  $scope.Deslogear = function(){
+    firebase.auth().signOut()
       .catch(function(error){
         console.info("error", error);
       })
       .then(function(respuesta){
-        console.info("respuesta",respuesta);
+        console.info("delogeado",respuesta);
+        $scope.logeado = "no";
       })
+  }
 
+  $scope.Reset = function(){
+    firebase.auth().sendPasswordResetEmail($scope.loginData.username)
+      .then(function(respuesta){
+        console.info(respuesta);
+      })
+      .catch(function(error){
+        console.info(error);
+      })
+  }
+
+  $scope.Verificar = function(){
+    firebase.auth().currentUser.sendEmailVerification();
+  }
+
+  $scope.Registrar = function(){
+    firebase.auth().createUserWithEmailAndPassword($scope.loginData.username, $scope.loginData.password)
+      /*.catch(function(error){
+          if(error.code == "auth/email-already-in-use")
+          {
+            alert("Email ya esta en uso");
+          }
+          else
+            if(error.code == "auth/invalid-email")
+            {
+              alert("Email invalido");
+            }
+            else
+              alert(error.message);
+        })*/
+        .then(function(respuesta){
+          console.info("respuesta",respuesta);
+          alert("se ha registrado");
+      }, function(error){
+          if(error.code == "auth/email-already-in-use")
+          {
+            alert("Email ya esta en uso");
+          }
+          else
+            if(error.code == "auth/invalid-email")
+            {
+              alert("Email invalido");
+            }
+            else
+              alert(error.message);
+        })
   }
 });
+
+
+//hacer boton de resetear password
+//verificar mail (mostrar cuando el token trae en false)
+//registrar firebase.auth()register(mail,pass)
