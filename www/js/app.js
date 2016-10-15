@@ -69,6 +69,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })
 
+  .state('app.loginGithub', {
+      url: '/loginGithub',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/loginGithub.html',
+          controller: 'LoginGithubCtrl'
+        }
+      }
+    })
+
   .state('app.single', {
     url: '/playlists/:playlistId',
     views: {

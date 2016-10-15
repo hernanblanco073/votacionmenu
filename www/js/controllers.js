@@ -114,22 +114,11 @@ angular.module('starter.controllers', [])
 
   $scope.Registrar = function(){
     firebase.auth().createUserWithEmailAndPassword($scope.loginData.username, $scope.loginData.password)
-      /*.catch(function(error){
-          if(error.code == "auth/email-already-in-use")
-          {
-            alert("Email ya esta en uso");
-          }
-          else
-            if(error.code == "auth/invalid-email")
-            {
-              alert("Email invalido");
-            }
-            else
-              alert(error.message);
-        })*/
-        .then(function(respuesta){
+      .then(function(respuesta){
+
           console.info("respuesta",respuesta);
           alert("se ha registrado");
+          
       }, function(error){
           if(error.code == "auth/email-already-in-use")
           {
@@ -144,6 +133,39 @@ angular.module('starter.controllers', [])
               alert(error.message);
         })
   }
+})
+
+
+.controller('LoginGithubCtrl', function($scope, $stateParams, $timeout) {
+
+  $scope.usuario = "";
+  $scope.logeado = "no";
+
+  $scope.Logear = function(){
+    firebase.auth().signInWithPopup(provider)
+    .then(function(result) {
+
+      console.info("logeado", result.credential.accessToken);
+      //console.info("usuario", result.user);
+      $timeout(function(){$scope.logeado = "ok"});
+      $scope.usuario = result.user.displayName;
+
+    }).catch(function(error) {
+
+      console.info("error", error.message);
+      });
+  }
+
+  $scope.Deslogear = function(){
+    firebase.auth().signOut()
+      .then(function() {
+        $timeout(function(){$scope.logeado = "no"});
+        console.info("deslogeado");
+      }, function(error) {
+         console.info("error", error.message);
+      });
+  }
+
 });
 
 
