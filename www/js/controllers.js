@@ -118,7 +118,7 @@ angular.module('starter.controllers', [])
 
           console.info("respuesta",respuesta);
           alert("se ha registrado");
-          
+
       }, function(error){
           if(error.code == "auth/email-already-in-use")
           {
@@ -145,7 +145,7 @@ angular.module('starter.controllers', [])
     firebase.auth().signInWithPopup(provider)
     .then(function(result) {
 
-      console.info("logeado", result.credential.accessToken);
+      console.info("logeado", result.user);
       //console.info("usuario", result.user);
       $timeout(function(){$scope.logeado = "ok"});
       $scope.usuario = result.user.displayName;
